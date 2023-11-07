@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
+		crossorigin="anonymous">
+	<script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+        type="application/javascript"></script>
+    <title>Vehicle NFT</title>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Vehicle NFT</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./maintenance.html">Maintenance</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+	<header>
+		<h1 class="text-center" id="header">Information about my vehicles</h1>
+	</header>
+
+
+	<div class="container">
+		<!-- connect metamask -->
+		<div class="row">
+			<div class="col-md-2 col-4 mt-1 text-end">Address</div>
+			<div class="col-md-6 col-12 mt-1 d-grid">
+				<p id="username" class="bg-warning text-truncate">null</p>
+			</div>
+			<div class="col-md-2 col-4 d-grid">
+				<button type="button" class="h4 btn btn-warning login">Connect Wallet</button>
+			</div>
+			<div class="col-md-2 col-4 d-grid">
+				<button type="button" class="h4 btn btn-primary myNFT disabled">My NFT</button>
+			</div>
+			<div class="col-12">
+				<div id='login_alert'></div>
+			</div>
+		</div>
+		<hr/>
+		<div class="row">
+			<div class="col-md-6 col-12 mt-1">
+				<div id="vehicle_info">My vehicle numbers [No data]</div>
+			</div>
+			<div class="col-md-2 col-4 text-end mt-1">Vehicle number=</div>
+			<div class="col-md-2 col-4">
+				<input type="text" class="form-control" id="vehicle_number">
+			</div>
+			<div class="col-md-2 col-4 d-grid">
+				<button type="button" class="btn btn-primary maintNFT disabled">Maintenance NFT</button>
+			</div>
+		</div>
+		<hr/>
+		<div class="row"><div class="col-12 fw-bold fst-italic">[My NFT]</div></div>
+		<div class="row" id="mynfts"></div><hr/>
+		<div class="row"><div class="col-12 fw-bold fst-italic">[Maintainance NFT]</div></div>
+		<div class="row" id="mtnfts"></div>
+		<!--
+		<hr/>
+		<div class="row">
+			<div class="col-2 d-grid">
+				<button type="button" class="btn btn-primary testBtn">Test</button>
+			</div>
+		</div>
+		<div class="row" id='test'>
+		</div>
+		-->
+	</div>
+	<script>
+		$(".btn.myNFT").click(async () => {
+			myNFTs(1);
+		})
+		$(".btn.maintNFT").click(async () => {
+			myNFTs(2);
+		})
+
+		function displayNFT(url,type,id,time,out){
+			//console.log(url);
+			$.getJSON(url, function(data){
+				//console.log(data.image);
+				var msg="";
+				msg+='<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12">'
+				msg+='<div class="card card-body">';
+				msg+='<img src="' + data.image + '" class="card-img-top">';
+				msg+='<h5 class="card-title">' + data.name + '</h5>';
+				msg+='<p class="card-text fs-6">';
+				msg+= data.description + '<br/>';
+				msg+= 'Std=' + type + '<br/>';
+				msg+= 'ID=' + id + '<br/>';
+				if(time != 0){
+					msg+= 'Date=' + datecng(time);
+				}
+				msg+='</p>';
+				msg+='</div>';
+				msg+='</div>';
+				if(out=="test"){
+					$("#test").append(msg);
+				}else if(out=="mynft"){
+					$("#mynfts").append(msg);
+				}else if(out=="mtnft"){
+					$("#mtnfts").append(msg);
+				}
+			})
+		}
+
+		function datecng(time){
+            //convert time to date
+            var year = 1970;
+			var month;
+			var day;
+			var minus;
+            var uruu = false;
+			var t = Number(time);
+            t += 32400;//UTC +9 hour
+            //calc year
+            do {
+            	if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
+                    minus = 31622400;//uruu 366days
+                    uruu = true;
+                } else {
+                    minus = 31536000;
+                	uruu = false;
+                }
+                if ((t - minus) >= 0) {
+                    t -= minus;
+                    year++;
+                } else {
+                    break;
+                }
+            } while (true);
+            //calc month
+            month = 1;
+            do {
+            	if (month === 2) {
+                	if (uruu === true) {
+                        minus = 2505600;//uruu 29days
+                    } else {
+                        minus = 2419200;//uruu 28days
+                    }
+                } else if (month === 4 || month === 6 || month === 9 || month === 11) {
+                    minus = 2592000;//30 days
+                } else {
+                    minus = 2678400;//31 days
+                }
+                //month=1,3,5,7,9,11
+                if ((t - minus) >= 0) {
+                    t -= minus;
+                    month++;
+                } else {
+                    break;
+                }
+            } while (month <= 12);
+            //calc day
+            day = parseInt(t / 86400) + 1;
+			var msg = year + "/" + month + "/" + day;
+			return msg;
+		}
+		
+		$(".btn.testBtn").click(async () => {
+			$("#test").html("");
+			for(var i=0;i<10;i++){
+				displayNFT("https://eiden.tv/nft/cu20.json","erc721",1,1234,"test");
+			}
+		})
+
+		//WEB3
+		var provider;
+		var signer;
+		var myAddress;
+		var vehicleNums = new Array();
+
+
+		//contruct
+		const abi721 = [
+			'event Transfer(address indexed from, address indexed to, uint256 value)', 
+			'function ownersHistryLength(address adr) view returns (uint256)',
+   			'function ownersHistory(address adr,uint256 no) view returns (uint256)',
+			'function tokenURI(uint256 _tokenId) view returns (string memory)',
+			'function balanceOf(address _owner) view returns (uint256)',
+			'function ownerOf(uint256 _tokenId) view returns (address)'
+		];
+		const abi1155 = [
+			'function balanceOf(address account, uint256 id) view returns (uint256)',
+			'function uri(uint256 id) view returns (string memory)'
+		];
+		const abiVehicle = [
+			'function lengthVehicleInfo(address _adr) view returns(uint)',
+ 			'function readVehicleInfo(address _adr,uint _no) view returns(uint)'
+		];
+		const abiMaintenance = [
+			'function lengthMaintenanceInfo(uint _num) view returns(uint)',	
+			'function readMaintenanceInfo(uint _num,uint _no) view returns(uint,uint)',
+		    'function lengthUserInfo(address _adr) view returns(uint)',
+			'function readUserInfo(address _adr,uint _no) view returns(uint,uint)'
+		];
+	    const contract721Address = "0xf3397a2300428d472fFC5976dAFc71b221366161";
+		const contract1155Address = "0xe8F32a4C7FA409ECc8Fc9424b18Eb7F1339265A4";
+		const contractVehicleAddress = "0x1e58CA6529D198B7445973a5eA12787Df0694A72";
+		const contractMaintenanceAddress = "0x719531DBc6511e1cfCbA033e6B05126C6bd0a9D4";
+		var contract721;
+		var contract1155;
+		var contractVehicle;
+		var contractMaintenance;	
+
+		$(".btn.login").click(async () => {
+   		    try {
+				provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+				await provider.send("eth_requestAccounts", []);
+				const net = await provider.getNetwork();
+				console.log(net.chainId);
+				if(net.chainId != 1261120){
+					throw new Error("Connect zkatana network");
+				}
+				signer = provider.getSigner();
+				myAddress = await signer.getAddress();
+				//contract
+				if(contract721 == undefined){
+					contract721 = new ethers.Contract(contract721Address, abi721, signer);
+				}
+				if(contract1155 == undefined){
+					contract1155 = new ethers.Contract(contract1155Address, abi1155, signer);
+				}
+				if(contractVehicle == undefined){
+					contractVehicle = new ethers.Contract(contractVehicleAddress, abiVehicle , signer);
+				}
+				if(contractMaintenance == undefined){
+					contractMaintenance = new ethers.Contract(contractMaintenanceAddress, abiMaintenance , signer);
+				}		
+				//console.log(myAddress);
+				$("#username").html(myAddress);
+   	        	$(".btn").removeClass("disabled");			
+				$("#login_alert").html("");
+				myNFTs(0);
+				$("#mynfts").html('<div class="col-12"></div>');
+				$("#mtnfts").html('<div class="col-12"></div>');
+    	    } catch (error) {
+				msgerr = '<div id="alert-2" class="alert alert-danger lead">'+ error.message +'</div>';
+				$("#login_alert").html(msgerr);
+	        }
+	    })
+
+		async function myNFTs(type) {
+			if(type==0){//Viecle number
+				var vlen =  await contractVehicle.lengthVehicleInfo(myAddress);
+				var msg;
+				if(vlen == 0){
+					msg = "My vehicle numbers [No data]";
+				}else{
+					vehicleNums.length = 0;
+					msg = "My vehicle numbers [";
+					for(var i=0;i<vlen;i++){
+						vehicleNums.push( await contractVehicle.readVehicleInfo(myAddress,i) );
+						msg += String(vehicleNums[i]);
+						if(i!=(vlen-1)){
+							msg += " , ";
+						}
+					}
+					msg +="]";
+				}
+				$("#vehicle_info").html(msg);
+			}else if(type==1){  //My NFT
+				$("#mynfts").html("");
+				var mylen = await contract721.ownersHistryLength(myAddress);
+				for(var i = 0;i < mylen; i++ ){
+					var n=await contract721.ownersHistory(myAddress,i);
+					if(await contract721.ownerOf(n) == myAddress){
+						//msg += await contract721.tokenURI(n) + "<br/>";
+						var url = await contract721.tokenURI(n);
+						displayNFT(url,"ERC-721",n,0,"mynft"); 
+					}
+				}
+				var mtlen = await contractMaintenance.lengthUserInfo(myAddress);
+				for(var i = 0;i < mtlen ; i++ ){
+					var id=await contractMaintenance.readUserInfo(myAddress,i);
+					var n=await contract1155.balanceOf(myAddress,id[0]);
+					if(n>0){
+						var url=await contract1155.uri(id[0]);
+						//msg += String(id[0]) + " " + String(id[1]) + " " + url +"<br/>"
+						displayNFT(url,"ERC-1155",id[0],id[1],"mynft"); 
+					}
+				}
+				if((mtlen+mylen)==0){
+					$("#mynfts").html('<div class="col-12">No NFT</div>');
+				}
+			}else{ //Maintainance NFT
+				$("#mtnfts").html("");
+				var vn=$('#vehicle_number').val();
+				const mtlen = await contractMaintenance.lengthMaintenanceInfo(vn);
+				for(var i = 0;i < mtlen ; i++ ){
+					var id=await contractMaintenance.readMaintenanceInfo(vn,i);
+					var url=await contract1155.uri(id[0]);
+					msg += String(id[0]) + " " + String(id[1]) + " " + url +"<br/>"
+					displayNFT(url,"ERC-1155",id[0],id[1],"mtnft"); 
+				}
+				if(mtlen==0){
+					$("#mtnfts").html('<div class="col-12">No NFT</div>');
+				}
+			}
+		}
+
+
+	</script>
+	<!-- Option 1: Bootstrap Bundle with Popper -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    	crossorigin="anonymous"></script>
+</body>
+</html>

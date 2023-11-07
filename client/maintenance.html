@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
+		crossorigin="anonymous">
+	<script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+        type="application/javascript"></script>
+    <title>Vehicle NFT</title>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Vehicle NFT</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="./maintenance.html">Maintenance</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+	<header>
+		<h1 class="text-center" id="header">Maintenance</h1>
+	</header>
+
+
+	<div class="container">
+		<!-- connect metamask -->
+		<div class="row">
+			<div class="col-md-2 col-4 mt-1 text-end">Address</div>
+			<div class="col-md-6 col-12 mt-1 d-grid">
+				<p id="username" class="bg-warning text-truncate">null</p>
+			</div>
+			<div class="col-md-2 col-4 d-grid">
+				<button type="button" class="h4 btn btn-warning login">Connect Wallet</button>
+			</div>
+		</div>
+        <div class="row">
+			<div class="col-12">
+				<div id='login_alert'></div>
+			</div>
+		</div>
+
+		<!-- Vehicle Info Title -->
+		<hr/>
+        <div class="row">
+            <div class="col-12 fs-5 fw-bold">Vehicle info</div>
+        </div>
+
+		<!-- Vehicle Info Add -->
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-12 fw-bold">Add(New)</div>
+            </div>
+            <div class="row">
+                <label for="vinfo_add_adr" class="col-3 col-form-label text-end">Address</label>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="vinfo_add_adr">
+                </div>
+            </div>
+            <div class="row mt-1">
+                <label for="vinfo_add_num" class="col-3 col-form-label text-end">Veicle number</label>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="vinfo_add_num">
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger vinfoadd disabled">Transaction</button>
+                </div>
+            </div>
+			<div class="row mt-2">
+				<div class="col-12" id='vadd_alert'></div>
+			</div>
+        </div>
+
+		<!-- Vehicle Info Change -->
+		<div class="card card-body mt-1">
+            <div class="row">
+                <div class="col-12 fw-bold">Owner Change</div>
+            </div>
+            <div class="row">
+                <label for="vinfo_cng_from_adr" class="col-3 col-form-label text-end">From address</label>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="vinfo_cng_from_adr">
+                </div>
+            </div>
+			<div class="row mt-1">
+                <label for="vinfo_cng_to_adr" class="col-3 col-form-label text-end">To address</label>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="vinfo_cng_to_adr">
+                </div>
+            </div>
+           <div class="row mt-1">
+                <label for="vinfo_cng_num" class="col-3 col-form-label text-end">Veicle number</label>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="vinfo_cng_num">
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger vinfocng disabled">Transaction</button>
+                </div>
+            </div>
+			<div class="row mt-2">
+				<div class="col-12" id='vcng_alert'></div>
+			</div>
+        </div>
+
+		<!-- Vehicle Info Delete -->
+		<div class="card card-body mt-1">
+            <div class="row">
+                <div class="col-12 fw-bold">Delete</div>
+            </div>
+            <div class="row">
+                <label for="vinfo_del_adr" class="col-3 col-form-label text-end">Address</label>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="vinfo_del_adr">
+                </div>
+            </div>
+            <div class="row mt-1">
+                <label for="vinfo_del_num" class="col-3 col-form-label text-end">Veicle number</label>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="vinfo_del_num">
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger vinfodel disabled">Transaction</button>
+                </div>
+            </div>
+			<div class="row mt-2">
+				<div class="col-12" id='vdel_alert'></div>
+			</div>
+        </div>
+        <hr/>
+		
+		<!-- Maintainance Info Title -->
+        <div class="row">
+            <div class="col-12 fs-5 fw-bold">Maintainance info</div>
+        </div>
+
+		<!-- Maintainance Info Add -->
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-12 fw-bold">Add(New)</div>
+            </div>
+            <div class="row">
+                <label for="minfo_add_adr" class="col-3 col-form-label text-end">Address</label>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="minfo_add_adr">
+                </div>
+            </div>
+            <div class="row mt-1">
+                <label for="minfo_add_num" class="col-3 col-form-label text-end">Veicle number</label>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="minfo_add_num">
+                </div>
+            </div>
+            <div class="row mt-1">
+                <label for="minfo_add_nftid" class="col-3 col-form-label text-end">NFT(ERC-1155) id</label>
+                <div class="col-9">
+                  <input type="text" class="form-control" id="minfo_add_nftid">
+                </div>
+            </div>
+	            <div class="row mt-1">
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger minfoadd disabled">Transaction</button>
+                </div>
+            </div>
+			<div class="row mt-2">
+				<div class="col-12" id='madd_alert'></div>
+			</div>
+        </div>
+		<hr/>
+	</div>
+
+	<!-- Java Script -->
+	<script>
+		$(".btn.vinfoadd").click(async () => {
+			vaddinfo();
+		})
+		$(".btn.vinfocng").click(async () => {
+			vcnginfo();
+		})
+		$(".btn.vinfodel").click(async () => {
+			vdelinfo();
+		})
+		$(".btn.minfoadd").click(async () => {
+			maddinfo();
+		})
+
+		//WEB3
+		var provider;
+		var signer;
+		var myAddress;
+		//contruct
+		var contractVehicle;
+		var contractMaintenance;
+		const abiVehicle = [
+			'event addVInfo(address _adr,uint _num)',
+		    'event delVInfo(address _adr,uint _num)',
+			'function isApproved(address operator) view returns (bool)',
+			'function addVehicleInfo(address _adr,uint _num) external',
+			'function cngVehicleInfo(address _fromAdr,address _toAdr,uint _num) external',
+			'function delVehicleInfo(address _adr,uint _num) external',
+			'function lengthVehicleInfo(address _adr) view returns(uint)',
+ 			'function readVehicleInfo(address _adr,uint _no) view returns(uint)'
+		];
+		const abiMaintenance = [
+			'event addMInfo(uint _num)',
+			'function isApproved(address operator,uint idNFT) view returns (bool)',
+			'function addMaintenanceInfo(uint _num,address _toAdr,uint _idNFT) external',
+			'function lengthMaintenanceInfo(uint _num) view returns(uint)',	
+			'function readMaintenanceInfo(uint _num,uint _no) view returns(uint,uint)',
+		    'function lengthUserInfo(address _adr) view returns(uint)',
+			'function readUserInfo(address _adr,uint _no) view returns(uint,uint)'
+		];
+	    
+		//const contract721Address = "0xf3397a2300428d472fFC5976dAFc71b221366161";
+		//const contract1155Address = "0xe8F32a4C7FA409ECc8Fc9424b18Eb7F1339265A4";
+		const contractVehicleAddress = "0x1e58CA6529D198B7445973a5eA12787Df0694A72";
+		const contractMaintenanceAddress = "0x719531DBc6511e1cfCbA033e6B05126C6bd0a9D4";
+
+		$(".btn.login").click(async () => {
+   		    try {
+				provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+				await provider.send("eth_requestAccounts", []);
+				const net = await provider.getNetwork();
+				console.log(net.chainId);
+				if(net.chainId != 1261120){
+					throw new Error("Connect zkatana network");
+				}
+				signer = provider.getSigner();
+				myAddress = await signer.getAddress();
+				if(contractVehicle == undefined){
+					contractVehicle = new ethers.Contract(contractVehicleAddress, abiVehicle , signer);
+				}
+				if(contractMaintenance == undefined){
+					contractMaintenance = new ethers.Contract(contractMaintenanceAddress, abiMaintenance , signer);
+				}
+				//console.log(myAddress);
+				$("#username").html(myAddress);
+   	        	$(".btn").removeClass("disabled");			
+				$("#login_alert").html("");
+				$("#vadd_alert").html("");
+				$("#vcng_alert").html("");
+				$("#vdel_alert").html("");
+				$("#madd_alert").html("");
+    	    } catch (error) {
+				var msgerr = '<div id="alert-login" class="alert alert-danger lead">'+ error.message +'</div>';
+				$("#login_alert").html(msgerr);
+	        }
+	    })
+
+		async function vaddinfo() {
+			var vnum=$('#vinfo_add_num').val();
+			var adr =$('#vinfo_add_adr').val();
+			//chk
+			$("#vadd_alert").html("wait...");
+			if(Number(vnum) == 0){
+				msg = '<div id="alert-vadd0" class="alert alert-danger">'+"Error! The number must be non-zero.";
+				$("#vadd_alert").html(msg);
+				return;
+			}
+			//
+			var aprvd = await contractVehicle.isApproved(myAddress);
+			if(aprvd == false){
+				msg = '<div id="alert-vadd1" class="alert alert-danger">'+"Error! You are not an approved operator.";
+				$("#vadd_alert").html(msg);
+				return;
+			}
+			//
+			var chk = false;
+			var n=await contractVehicle.lengthVehicleInfo(adr);
+			for(var i=0;i<n;i++){
+				var c=await contractVehicle.readVehicleInfo(adr,i);
+				if(c==vnum){
+					chk = true;
+				}
+			}
+			if(chk == true){
+				msg = '<div id="alert-vadd2" class="alert alert-danger">'+"Error! Already registered. Address=" + adr +" Vehicle number="+ vnum +'</div>';
+				$("#vadd_alert").html(msg);
+				return;
+			}
+			//operate
+			try{
+				await contractVehicle.addVehicleInfo(adr,vnum);
+				var filters = contractVehicle.filters["addVInfo"];
+				if (filters !== undefined) {
+					contractVehicle.on(filters(), (ev_adr,ev_num) => {
+						msg = '<div id="alert-vadd3" class="alert alert-success">'+"Success Address=" + ev_adr +" Vehicle number="+ Number(ev_num) +'</div>';
+						$("#vadd_alert").html(msg);
+						//console.log(ev_adr);
+						//console.log(Number(ev_num));  		  				
+					})
+				}
+			}catch(error){
+				var msgerr = '<div id="alert-vadd4" class="alert alert-danger lead">'+ error.message +'</div>';
+				$("#vadd_alert").html(msgerr);
+			}
+		}
+
+		async function vcnginfo(){
+			var vnum=$('#vinfo_cng_num').val();
+			var from_adr =$('#vinfo_cng_from_adr').val();
+			var to_adr = $('#vinfo_cng_to_adr').val();
+			//chk
+			$("#vcng_alert").html("wait...");
+			if(Number(vnum) == 0){
+				msg = '<div id="alert-vcng0" class="alert alert-danger">'+"Error! The number must be non-zero.";
+				$("#vcng_alert").html(msg);
+				return;
+			}
+			//
+			if(from_adr == to_adr){
+				msg = '<div id="alert-vcng1" class="alert alert-danger">'+"Error! From and To addresses are the same.";
+				$("#vcng_alert").html(msg);
+				return;
+			}
+			//
+			var aprvd = await contractVehicle.isApproved(myAddress);
+			if(aprvd == false){
+				msg = '<div id="alert-vcng2" class="alert alert-danger">'+"Error! You are not an approved operator.";
+				$("#vcng_alert").html(msg);
+				return;
+			}
+			//
+			var chk = false;
+			var n=await contractVehicle.lengthVehicleInfo(from_adr);
+			for(var i=0;i<n;i++){
+				var c=await contractVehicle.readVehicleInfo(from_adr,i);
+				if(c==vnum){
+					chk = true;
+				}
+			}
+			if(chk == false){
+				msg = '<div id="alert-vcng3" class="alert alert-danger">'+"Error! Not owned. Address=" + from_adr +" Vehicle number="+ vnum +'</div>';
+				$("#vcng_alert").html(msg);
+				return;
+			}
+			//operate
+			try{
+				await contractVehicle.cngVehicleInfo(from_adr,to_adr,vnum);
+				var filters = contractVehicle.filters["addVInfo"];
+				if (filters !== undefined) {
+   					contractVehicle.on(filters(), (ev_adr,ev_num) => {
+						msg = '<div id="alert-vcng4" class="alert alert-success">'+"Success Address=" + ev_adr +" Vehicle number="+ Number(ev_num) +'</div>';
+						$("#vcng_alert").html(msg);
+     				})
+				}
+			}catch(error){
+				var msgerr = '<div id="alert-vcng5" class="alert alert-danger lead">'+ error.message +'</div>';
+				$("#vcng_alert").html(msgerr);
+			}
+		}
+
+		async function vdelinfo(){
+			var vnum=$('#vinfo_del_num').val();
+			var adr =$('#vinfo_del_adr').val();
+			//chk
+			$("#vdel_alert").html("wait...");
+			var aprvd = await contractVehicle.isApproved(myAddress);
+			if(aprvd == false){
+				msg = '<div id="alert-vdel0" class="alert alert-danger">'+"Error! You are not an approved operator.";
+				$("#vdel_alert").html(msg);
+				return;
+			}
+			var chk = false;
+			var n=await contractVehicle.lengthVehicleInfo(adr);
+			for(var i=0;i<n;i++){
+				var c=await contractVehicle.readVehicleInfo(adr,i);
+				if(c==vnum){
+					chk = true;
+				}
+			}
+			if(chk == false){
+				msg = '<div id="alert-vdel1" class="alert alert-danger">'+"Error! Not owned. Address=" + adr +" Vehicle number="+ vnum +'</div>';
+				$("#vdel_alert").html(msg);
+				return;
+			}
+			//operate
+			try{
+				await contractVehicle.delVehicleInfo(adr,vnum);
+				var filters = contractVehicle.filters["delVInfo"];
+				if (filters !== undefined) {
+   					contractVehicle.on(filters(), (ev_adr,ev_num) => {
+						msg = '<div id="alert-vdel2" class="alert alert-success">'+"Success Address=" + ev_adr +" Vehicle number="+ Number(ev_num) +'</div>';
+						$("#vdel_alert").html(msg);
+   					})
+				}
+			}catch(error){
+				var msgerr = '<div id="alert-vdel3" class="alert alert-danger lead">'+ error.message +'</div>';
+				$("#vdel_alert").html(msgerr);
+			}
+		}
+
+		async function maddinfo(){
+			var vnum =$('#minfo_add_num').val();
+			var adr  =$('#minfo_add_adr').val();
+			var nftid=$('#minfo_add_nftid').val();
+			//chk
+			$("#madd_alert").html("wait...");
+			if(Number(vnum) == 0){
+				msg = '<div id="alert-madd0" class="alert alert-danger">'+"Error! The number must be non-zero.";
+				$("#madd_alert").html(msg);
+				return;
+			}
+			//
+			var aprvd = await contractMaintenance.isApproved(myAddress,nftid);
+			if(aprvd == false){
+				msg = '<div id="alert-madd1" class="alert alert-danger">'+"Error! You are not an approved operator.";
+				$("#madd_alert").html(msg);
+				return;
+			}
+			//
+			var chk = false;
+			var n=await contractVehicle.lengthVehicleInfo(adr);
+			for(var i=0;i<n;i++){
+				var c=await contractVehicle.readVehicleInfo(adr,i);
+				if(c==vnum){
+					chk = true;
+				}
+			}
+			if(chk == false){
+				msg = '<div id="alert-madd2" class="alert alert-danger">'+"Error! Not owned. Address=" + adr +" Vehicle number="+ vnum +'</div>';
+				$("#madd_alert").html(msg);
+				return;
+			}
+			//operate
+			try{
+				await contractMaintenance.addMaintenanceInfo(vnum,adr,nftid);
+				var filters = contractMaintenance.filters["addMInfo"];
+				if (filters !== undefined) {
+   					contractMaintenance.on(filters(), (ev_num) => {
+						msg = '<div id="alert-madd3" class="alert alert-success">'+"Success Vehicle number="+ Number(ev_num) +'</div>';
+						$("#madd_alert").html(msg);
+     				})
+				}
+			}catch(error){
+				var msgerr = '<div id="alert-madd4" class="alert alert-danger lead">'+ error.message +'</div>';
+				$("#madd_alert").html(msgerr);
+			}
+		}
+	</script>
+	<!-- Option 1: Bootstrap Bundle with Popper -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    	crossorigin="anonymous"></script>
+</body>
+</html>
