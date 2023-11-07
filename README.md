@@ -62,7 +62,6 @@ webアプリ側で他部署あるいは、他社向けの物を作ったり、�
 * soichi@eiden-gp.co.jp
  
 # License 
-Copyright (c) 2023 Soichi Sato  
-"無償の愛" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
+Copyright (c) 2023 Soichi Sato 
 
 
