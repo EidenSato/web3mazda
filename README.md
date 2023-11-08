@@ -31,6 +31,6 @@ https://github.com/EidenSato/web3mazda/blob/main/web3_hackathon_presentation_202
 * soichi@eiden-gp.co.jp
  
 # License 
-Copyright (c) 2023 Soichi Sato 
+Copyright (c) 2023 Eiden Co.Ltd. 
 
 
