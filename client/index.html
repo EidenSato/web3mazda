@@ -73,7 +73,7 @@
 		<hr/>
 		<div class="row"><div class="col-12 fw-bold fst-italic">[My NFT]</div></div>
 		<div class="row" id="mynfts"></div><hr/>
-		<div class="row"><div class="col-12 fw-bold fst-italic">[Maintainance NFT]</div></div>
+		<div class="row"><div class="col-12 fw-bold fst-italic">[Maintenance NFT]</div></div>
 		<div class="row" id="mtnfts"></div>
 		<!--
 		<hr/>
@@ -269,13 +269,20 @@
 					vehicleNums.length = 0;
 					msg = "My vehicle numbers [";
 					for(var i=0;i<vlen;i++){
-						vehicleNums.push( await contractVehicle.readVehicleInfo(myAddress,i) );
-						msg += String(vehicleNums[i]);
-						if(i!=(vlen-1)){
-							msg += " , ";
+						var vnum = await contractVehicle.readVehicleInfo(myAddress,i);
+						if(vnum != 0){
+							vehicleNums.push(vnum);
+							msg += String(vehicleNums[i]);
+							if(i!=(vlen-1)){
+								msg += " , ";
+							}
 						}
 					}
-					msg +="]";
+					if(vehicleNums.length == 0){
+						msg +="No data]";
+					}else{
+						msg +="]";
+					}
 				}
 				$("#vehicle_info").html(msg);
 			}else if(type==1){  //My NFT
