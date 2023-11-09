@@ -22,7 +22,7 @@ Vehicle numberとして、10,11,20,30のいずれかの数字を入力して”M
 
 # 資料
 プレゼンテーション資料  
-https://github.com/EidenSato/web3mazda/blob/main/web3_hackathon_presentation_20231108.pdf  
+https://github.com/EidenSato/web3mazda/blob/main/web3_hackathon_presentation_20231109.pdf  
  
 # Author
 * 佐藤　総一(Soichi Sato)  
