@@ -272,7 +272,7 @@
 						var vnum = await contractVehicle.readVehicleInfo(myAddress,i);
 						if(vnum != 0){
 							vehicleNums.push(vnum);
-							msg += String(vehicleNums[i]);
+							msg += String(vnum);
 							if(i!=(vlen-1)){
 								msg += " , ";
 							}
